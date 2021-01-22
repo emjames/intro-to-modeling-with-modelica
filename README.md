@@ -16,7 +16,9 @@
 
 # Running Examples
 
-To run the examples found here:
+To run the examples found here:  
+
 0. Download / Clone
-0. `python Runner/runner.py <path-to-example>/<example-file>.mo compile`
-0. `python Runner/runner.py <path-to-example>/<example-file>.mo plot`
+0. Run `python Runner/runner.py <path-to-example>/<example-file>.mo compile`
+0. Run `python Runner/runner.py <path-to-example>/<example-file>.mo plot`
+
