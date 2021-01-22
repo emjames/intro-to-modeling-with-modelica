@@ -3,6 +3,7 @@ import glob
 import os
 import pathlib
 import subprocess
+from Plots.plot import plot_result
 
 parser = argparse.ArgumentParser(description='Compile Modelica files')
 
@@ -64,6 +65,9 @@ def main():
             '-logFormat=xmltcp',
             '-override=startTime=0,stopTime=2,stepSize=0.004,tolerance=1e-6,solver=dassl,outputFormat=csv',
         ], cwd=file_parent_dir)
+    elif args.action == 'plot':
+        log(f'Plotting results for {file_name}')
+        plot_result(file_parent_dir, file_name)
     else:
         log('Unknown option')
 
@@ -80,6 +84,7 @@ if __name__ == '__main__':
                         choices=[
                             'clean',            # Remove all but .mo and .csv/mat files
                             'compile',          # Compile the .mo file
+                            'plot',             # Plot the result data file
                             'run',              # Run the compiled simulation
                         ],
                         )
