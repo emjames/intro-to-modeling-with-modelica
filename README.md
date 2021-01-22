@@ -7,8 +7,16 @@
     - [Linux](https://openmodelica.org/download/download-linux)
         - [Fedora RPM](https://build.openmodelica.org/rpm/)
 
-- Install
+- Install  
     ```sudo dnf install openmodelica-1.16-1.16.2-2.fc31.x86_64.rpm```
 
     Note: RHEL requires EPEL (all version) and devtoolset (RHEL 6) repositories enabled. 
     Devtools includes C++11 compilers. EPEL includes omniORB libraries (needed for OMPython and other OpenModelica clients)
+
+
+# Running Examples
+
+To run the examples found here:
+0. Download / Clone
+0. `python Runner/runner.py <path-to-example>/<example-file>.mo compile`
+0. `python Runner/runner.py <path-to-example>/<example-file>.mo plot`
