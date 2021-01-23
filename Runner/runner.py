@@ -1,5 +1,4 @@
 import argparse
-import glob
 import os
 import pathlib
 import subprocess
@@ -21,7 +20,7 @@ def main():
         return
 
     # Change the working dir to the file path's folder
-    file_parent_dir = str(pathlib.Path(args.file_path).parent)
+    file_parent_dir = str(pathlib.Path(args.file_path).parent.resolve())
     # File name with extension
     file_name_ext = str(pathlib.Path(args.file_path).name)
     # File name alone
@@ -45,16 +44,23 @@ def main():
         subprocess.run(['make', '-f', f'{file_name}.makefile'], cwd=file_parent_dir)
         log('===== Makefile END =====')
 
-
     elif args.action == 'clean':
-        log('cleaning')
-        # File extensions to keep
-        file_ext_to_keep = ['*.mo', '*.csv', '*.mat']
+        log('Cleaning: {file_parent_dir}')
 
-        for ext in file_ext_to_keep:
-            files = subprocess.check_output(['find', '.', '-type', 'f', '-name', ext],
-                                            cwd=file_parent_dir).decode('utf-8')
-            log(f'FILES: {str(files)}')
+        # File extensions to keep
+        #file_ext_to_keep = ['.mo', '.csv', '.mat']
+        # File extensions to remove
+        file_ext_to_remove = ['.c', '.h', '.o', '.json', '.xml', '.makefile']
+
+        # Find the files in the parent path that have the extension we want to remove
+        files = {p.resolve() for p in pathlib.Path(file_parent_dir).glob(
+            '**/*') if p.suffix in file_ext_to_remove}
+
+        # Remove (unlink) the file(s)
+        for f in files:
+            f.unlink()
+        # Remove the executable (it does not have an extension)
+        pathlib.Path(f'{file_parent_dir}/{file_name}').unlink()
 
     elif args.action == 'run':
         log(f'Running: {file_name}')
