@@ -62,14 +62,17 @@ def main():
         # Remove the executable (it does not have an extension)
         pathlib.Path(f'{file_parent_dir}/{file_name}').unlink()
 
-    elif args.action == 'run':
+    elif args.action == 'simulate':
         log(f'Running: {file_name}')
+
+        overrides = f'outputFormat=csv'
+        if args.override:
+            overrides = f'outputFormat=csv,{args.override}'
 
         subprocess.run([
             f'./{file_name}',
-            '-port=39279',
-            '-logFormat=xmltcp',
-            '-override=startTime=0,stopTime=2,stepSize=0.004,tolerance=1e-6,solver=dassl,outputFormat=csv',
+            #'-override=startTime=0,stopTime=4,stepSize=0.004,tolerance=1e-6,solver=dassl,outputFormat=csv',
+            f'-override={overrides}'
         ], cwd=file_parent_dir)
     elif args.action == 'plot':
         log(f'Plotting results for {file_name}')
@@ -91,7 +94,11 @@ if __name__ == '__main__':
                             'clean',            # Remove all but .mo and .csv/mat files
                             'compile',          # Compile the .mo file
                             'plot',             # Plot the result data file
-                            'run',              # Run the compiled simulation
+                            'simulate',         # Run the compiled simulation
                         ],
+                        )
+    parser.add_argument('-o', '--override',
+                        help='Override parameters for executable',
+                        type=str,
                         )
     main()
