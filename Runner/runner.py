@@ -22,9 +22,9 @@ def main():
     # Change the working dir to the file path's folder
     file_parent_dir = str(pathlib.Path(args.file_path).parent.resolve())
     # File name with extension
-    file_name_ext = str(pathlib.Path(args.file_path).name)
+    file_name_with_ext = str(pathlib.Path(args.file_path).name)
     # File name alone
-    file_name = str(file_name_ext.split('.')[0])
+    file_name = str(file_name_with_ext.split('.')[0])
 
     # Run the Modelica compiler with arguments
     if args.action == 'compile':
@@ -32,9 +32,9 @@ def main():
 
         log('===== OMC output BEGIN =====')
         subprocess.run(['omc',                  # OpenModelica compiler
-                        '-s',                   # Simulate flag
-                        '-d=initialization',
-                        file_name_ext,
+                        '-s',                   # Simulation code generation flag
+                        '-d=initialization',    # -d[ebug] mode. Show additional information from initialization
+                        file_name_with_ext,
                         ],
                        cwd=file_parent_dir,     # Change working dir
                        )
@@ -45,7 +45,7 @@ def main():
         log('===== Makefile END =====')
 
     elif args.action == 'clean':
-        log('Cleaning: {file_parent_dir}')
+        log(f'Cleaning: {file_parent_dir}')
 
         # File extensions to keep
         #file_ext_to_keep = ['.mo', '.csv', '.mat']
