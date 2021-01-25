@@ -3,6 +3,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 import pathlib
+from .interactive import InteractiveLegend
 
 parser = argparse.ArgumentParser(description='Plot Modelica results')
 
@@ -18,14 +19,14 @@ def plot_result(parent_dir, file_name):
 
     fig, ax = plt.subplots()
 
-    for col in list(df.columns[1:]):
+    for lbl, col in zip(df.columns[1:], list(df.columns[1:])):
         x = df[df.columns[0]]
         y = df[col]
-        ax.plot(x, y)
+        ax.plot(x, y, label=lbl)
 
     plt.grid()
-    plt.savefig(img_path)
-    plt.legend(df.columns[1:])
+    plt.legend()
+    leg = InteractiveLegend()
     plt.show()
 
 
