@@ -76,7 +76,7 @@ def main():
         ], cwd=file_parent_dir)
     elif args.action == 'plot':
         log(f'Plotting results for {file_name}')
-        plot_result(file_parent_dir, file_name)
+        plot_result(file_parent_dir, file_name, args.variables)
     else:
         log('Unknown option')
 
@@ -101,4 +101,9 @@ if __name__ == '__main__':
                         help='Override parameters for executable',
                         type=str,
                         )
+
+    parser.add_argument('-v', '--variables',
+                        help='Variables to plot',
+                        default='all',
+                        type=str)
     main()

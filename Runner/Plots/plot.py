@@ -8,24 +8,35 @@ from .interactive import InteractiveLegend
 parser = argparse.ArgumentParser(description='Plot Modelica results')
 
 
-def plot_result(parent_dir, file_name):
+def plot_result(parent_dir, file_name, plot_vars = 'all'):
     # Make an image dir if it does not exist
     plots_dir = pathlib.Path(f'{parent_dir}/Plots')
     plots_dir.mkdir(parents=True, exist_ok=True)
     csv_path = f'{parent_dir}/{file_name}_res.csv'
     img_path = f'{plots_dir}/{file_name}.png'
 
-    df = pd.read_csv(csv_path)
+    data = pd.read_csv(csv_path)
 
     fig, ax = plt.subplots()
 
-    for lbl, col in zip(df.columns[1:], list(df.columns[1:])):
-        x = df[df.columns[0]]
-        y = df[col]
-        ax.plot(x, y, label=lbl)
+    if plot_vars is not 'all':
+        # Split to string list
+        plot_vars_ = plot_vars.split(',')
 
+        # Get the data to plot
+        data = data[plot_vars_]
+
+    for col in data.iloc[:,1:]:
+        # X axis should always be the 0th col
+        x = data[data.columns[0]]
+        y = data[col]
+        lbl = col
+        ax.plot(x, y, label=lbl.title())
+
+    plt.xlabel(data.columns[0].title())
     plt.grid()
     plt.legend()
+    plt.savefig(f"{parent_dir}/Plots/{file_name}_{plot_vars.replace(',', '_')}.png")
     leg = InteractiveLegend()
     plt.show()
 
