@@ -68,6 +68,7 @@ def main():
         overrides = f'outputFormat=csv'
         if args.override:
             overrides = f'outputFormat=csv,{args.override}'
+        log(f'Override: {overrides}')
 
         subprocess.run([
             f'./{file_name}',
@@ -103,7 +104,7 @@ if __name__ == '__main__':
                         )
 
     parser.add_argument('-v', '--variables',
-                        help='Variables to plot',
+                        help='CSV variables to plot (e.g. x,y,z)',
                         default='all',
                         type=str)
     main()
